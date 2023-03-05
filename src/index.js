@@ -1,8 +1,9 @@
+import { fetchCountries } from './js/fetchCountries';
 import debounce from 'lodash.debounce';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import './css/styles.css';
 
-const DEBOUNCE_DELAY = 300;
-const BASE_URL = 'https://restcountries.com/v2/name/';    
+const DEBOUNCE_DELAY = 300;   
 const refs = {
     input: document.querySelector('#search-box'),
     countryList: document.querySelector('.country-list'),
@@ -26,7 +27,8 @@ function onInput(event) {
     fetchCountries(`${inputValue}`)
     .then((data) => {
         if (data.length >= 10) {
-
+            Notify.info('Too many matches found. Please enter a more specific name.');
+            return;
         }  
         if (data.length === 1) {
             createCountryInfoMurkup(data)
@@ -35,19 +37,8 @@ function onInput(event) {
         createCountryListMurkup(data);
     }) 
     .catch((error) => {
-        console.log(error);
+        Notify.failure('Oops, there is no country with that name');
     });
-}
-
-
-function fetchCountries(name) {
-    return fetch(`${BASE_URL}${name}?fields=name,capital,population,flags,languages`)
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error(response.status);
-        }
-        return response.json();
-    })   
 }
 
 
