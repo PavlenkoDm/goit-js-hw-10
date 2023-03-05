@@ -27,7 +27,7 @@ function onInput(event) {
     fetchCountries(`${inputValue}`)
     .then((data) => {
         if (data.length >= 10) {
-            Notify.info('Too many matches found. Please enter a more specific name.');
+            Notify.info('Too many matches found. Please enter a more specific name.', { position: 'center-top' });
             return;
         }  
         if (data.length === 1) {
@@ -37,7 +37,7 @@ function onInput(event) {
         createCountryListMurkup(data);
     }) 
     .catch((error) => {
-        Notify.failure('Oops, there is no country with that name');
+        Notify.failure('Oops, there is no country with that name', { position: 'center-top' });
     });
 }
 
